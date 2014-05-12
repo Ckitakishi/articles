@@ -254,8 +254,10 @@ Core Animation comes with a number of built-in easing functions beyond linear, s
   <center><img src="{{site.images_path}}/issue-12/rect-default@2x.gif" width="540px"></center>
 
 It's also possible, within limits, to create your own easing function using `+functionWithControlPoints::::`.[^3] By passing in the _x_ and _y_ components of two control points of a cubic Bézier curve, you can easily create custom easing functions, such as the one I chose for our little red rocket:
+在一定限度内，你也可以使用 `+functionWithControlPoints::::` 创建自己的缓动函数。[^3] 通过传递三阶 Bézier 曲线的两个控制点的 _x_ 和 _y_ 坐标，你可以轻松的创建自定义缓动函数，例如我为我们的红色小火箭选择的那个。//!!
 
 [^3]: This method is infamous for having three nameless parameters, not something that we recommend you make use of in your APIs.
+[^3]: 这个方法因为有三个无名参数而声名狼藉，我们并不推荐在你的 API 中使用该方法。
 
 <center><img src="http://img.objccn.io/issue-12/rocket-custom.gif" width="400px"></center>
 
@@ -272,14 +274,18 @@ It's also possible, within limits, to create your own easing function using `+fu
     rocket.layer.position = CGPointMake(150, 0);
 
 Without going into too much detail on Bézier curves, they are a common technique to create smooth curves in computer graphics. You've probably seen them in vector-based drawing tools such as Sketch or Adobe Illustrator.
+我不打算讲太多关于 Bézier 曲线的细节，在计算机图形学中，它们是画平滑曲线的常用技术。你可能在基于矢量的绘图工具中见过它们，如 Sketch 或 Adobe Illustrator。
 
 <center><img src="http://img.objccn.io/issue-12/bezier.png"></center>
 
 The values passed to `+functionWithControlPoints::::` effectively control the position of the handles. The resulting timing function will then adjust the speed of the animation based on the resulting path. The x-axis represents the fraction of the duration, while the y-axis is the input value of the interpolation function.
+传递给 `+functionWithControlPoints::::` 的值有效地控制了handles的位置。所得到的定时函数讲基于得到的路径来调整动画的速度。x 坐标代表时间的一部分，而 y 坐标是插值函数的输入值。
 
 Unfortunately, since the components are clamped to the range of `[0–1]`, it is not possible to create common effects such as anticipation -- where an animated object swings back before moving to its target -- or overshooting.
+遗憾的是，由于这些节点被锁定在 `[0–1]` 的范围内，它不能创建普通的效果如预期 -- 一个动画对象在到达它的目标前回摆 -- 或超出目标。//！！
 
 I wrote a small library, called [RBBAnimation](https://github.com/robb/RBBAnimation), that contains a custom `CAKeyframeAnimation` subclass which allows you to use [more complex easing functions](https://github.com/robb/RBBAnimation#rbbtweenanimation), including bounces or cubic Bézier functions with negative components:
+我写了一个小型库，叫做 [RBBAnimation](https://github.com/robb/RBBAnimation),它包含一个允许使用 [更多复杂缓动函数](https://github.com/robb/RBBAnimation#rbbtweenanimation) 的自定义子类 `CAKeyframeAnimation`，包括反弹和三次 Bézier 函数的负分量。
 
 <center><img src="http://img.objccn.io/issue-12/anticipate.gif" width="140"></center>
 
