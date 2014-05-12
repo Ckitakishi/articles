@@ -408,7 +408,7 @@ Pop也可以在 OS X 上使用，并且允许我们在每个 `NSObject` 的子�
 - [Core Animation 编程指南](https://developer.apple.com/library/ios/documentation/Cocoa/Conceptual/CoreAnimation_guide/Introduction/Introduction.html)
 
 - [12 basic principles of animation](https://en.wikipedia.org/wiki/12_basic_principles_of_animation)
- [动画的 12 个基本原则](https://en.wikipedia.org/wiki/12_basic_principles_of_animation)
+- [动画的 12 个基本原则](https://en.wikipedia.org/wiki/12_basic_principles_of_animation)
 
 - [Animating drawing of CGPath with CAShapeLayer](http://oleb.net/blog/2010/12/animating-drawing-of-cgpath-with-cashapelayer)
 - [使用 CAShapeLayer 的 CGPath 动画绘图](http://oleb.net/blog/2010/12/animating-drawing-of-cgpath-with-cashapelayer)
