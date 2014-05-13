@@ -8,43 +8,42 @@ author: "<a href=\"https://twitter.com/ceterum_censeo\">Robert Böhnke</a>"
 ---
 
 The applications we write are rarely a static experience, as they adapt to the user's needs and change states to perform a multitude of tasks.
-我们写的应用程序往往都不是静态的，因为它们需要适应用户的需求以及为了执行多任务而改变状态。
+我们写的应用程序往往都不是静态的，因为它们需要适应用户的需求以及为执行多任务而改变状态。
 
 When transitioning between these states, it is important to communicate what is going on. Rather than jumping between screens, animations help us explain where the user is coming from and where he or she going.
-在这些状态之间转换时，清晰的揭示正在发生什么是非常重要的，而不是在页面之间跳跃，动画帮助我们解释用户从哪里来，要到哪里去。
-
+在这些状态之间转换时，清晰的揭示正在发生什么是非常重要的。而不是在页面之间跳跃，动画帮助我们解释用户从哪里来，要到哪里去。
 The keyboard slides in and out of view to give the illusion that it is a natural part of the phone that was simply hidden below the screen. View controller transitions reinforce the navigational structure of our apps and give the user hints in which direction he or she is moving. Subtle bounces and collisions make interfaces life-like and evoke physical qualities in what is otherwise an environment without visual embellishments.
-键盘在 view 中滑进滑出给我们了一个错觉，它是简单的被隐藏在屏幕下方的且是手机很自然的一个部分。View controller 转场加强了我们的应用程序的导航结构，并且给了用户他正在移向哪个方向的提示。微妙的反弹和碰撞使界面栩栩如生，并且在一个没有视觉装饰的环境中激发了自然的特性。
+键盘在 view 中滑进滑出给了我们一个错觉，它是简单的被隐藏在屏幕下方的且是手机很自然的一个部分。View controller 转场加强了我们的应用程序的导航结构，并且给了用户正在移向哪个方向的提示。微妙的反弹和碰撞使界面栩栩如生，并且在一个没有视觉修饰的环境中激发了物理特性。
 
 Animations are a great way to tell the story of your application, and by understanding the basic principles behind animation, designing them will be a lot easier.
-动画是绝佳的方式以讲述你的应用程序的故事，在了解动画背后的基本原理之后，设计它们会轻松很多。
+动画是讲述你应用的故事的绝佳方式，在了解动画背后的基本原理之后，设计它们会轻松很多。
 
 ## First Things First
 ## 重要的事先来
 
 In this article (and for most of the rest of this issue), we will look at Core Animation specifically. While a lot of what you will see can also be accomplished using higher-level UIKit methods, Core Animation will give you a better understanding of what is going on. It also allows for a more explicit way of describing animations, which is useful for readers of this article, as well as readers of your code.
-在这篇文章（以及这个 issue 中其余大多数文章）中，我们将特别地探讨 Core Animation。虽然你将看到的很多东西也可以用更高级的 UIKit 方法来完成，但是 Core Animation 将会让你更好的理解正在发生什么。它还考虑到了一个描述动画更明确的方式，对这篇文章读者以及代码的读者都非常有用。
+在这篇文章（以及这个 issue 中其余大多数文章）中，我们将特别地探讨 Core Animation。虽然你将看到的很多东西也可以用更高级的 UIKit 的方法来完成，但是 Core Animation 将会让你更好的理解正在发生什么。它还考虑到了一个描述动画更明确的方式，对这篇文章读者以及你自己的代码的读者都非常有用。
 
 Before we can have a look at how animations interact with what we see on the screen, we need to take a quick look at Core Animation's `CALayer`, which is what the animations operate on.
-在我们可以看看动画如何与我们在屏幕上看到的内容交互之前，我们需要快速浏览一下 Core Animation 的 `CALayer`，这是动画产生作用的地方。
+在看动画如何与我们在屏幕上看到的内容交互之前，我们需要快速浏览一下 Core Animation 的 `CALayer`，这是动画产生作用的地方。
 
 You probably know that `UIView` instances, as well as layer-backed `NSView`s, modify their `layer` to delegate rendering to the powerful Core Graphics framework. However, it is important to understand that animations, when added to a layer, don't modify its properties directly.
-你大概知道 `UIView` 实例，以及 layer-backed `NSView`，修改它们的 `layer`来委托渲染到强大的 Core Graphics 框架，然而，你务必理解，当动画添加到一个 layer 时，不要直接修改它的属性。
+你大概知道 `UIView` 实例，以及 layer-backed `NSView`，修改它们的 `layer`来委托渲染到强大的 Core Graphics 框架。然而，你务必理解，当动画添加到一个 layer 时，不要直接修改它的属性。
 
 Instead, Core Animation maintains two parallel layer hierarchies: the _model layer tree_ and the _presentation layer tree_.[^1] Layers in the former reflect the well-known state of the layers, wheres only layers in the latter approximate the in-flight values of animations.
-相反的，Core Animation 维护了两个平行 layer 层次结构： _模型层树（model layer tree）_ 和 _表示层树（presentation layer tree）_.[^1] 前者中的 Layers 反映了 layers 的著名状态，只有后者的 layers 近似于动画正在传送的值。 //！！！！！！！！！！！
+相反的，Core Animation 维护了两个平行 layer 层次结构： _model layer tree（模型层树）_ 和 _presentation layer tree（表示层树）_。[^1] 前者中的 layers 反映了 layers 的著名状态，只有后者的 layers 近似于动画正在传送的值。 //！！！！！！！！！！！
 
 [^1]: There is actually a third layer tree called the _rendering tree_. Since it's private to Core Animation, we won't cover it here.
-[^1]: 实际上有所谓的第三 layer 树，叫做 _渲染树（rendering tree）_。因为它对 Core Animation 而言是私有的，我们在这里不讨论它。
+[^1]: 实际上有所谓的第三 layer 树，叫做 _rendering tree（渲染树）_。因为它对 Core Animation 而言是私有的，所以我们在这里不讨论它。
 
 Consider adding a fade-out animation to a view. If you, at any point during the animation, inspect the layer's `opacity` value, you most likely won't get an opacity that corresponds to what is onscreen. Instead, you need to need to inspect the presentation layer to get the correct result.
-考虑增加一个渐出动画到 view上。如果，在动画中的任何时刻，检查 layer 的 `透明度` 值，你极有可能不会得到对应屏幕内容的透明度。取而代之，你需要检查表示层（presentation layer）以获得正确的结果。
+考虑在view上增加一个渐出画面。如果在动画中的任意时刻，查看 layer 的 `透明度` 值，你极有可能得不到对应屏幕内容的透明度。取而代之，你需要查看 presentation layer 以获得正确的结果。
 
 While you may not set properties of the presentation layer directly, it can be useful to use its current values to create new animations or to interact with layers while an animation is taking place.
-虽然你可能不会直接设置表示层，但是使用它的当前值来创建新的动画或者在动画发生时与 layers 交互是非常有用的。
+虽然你可能不会直接设置表示层的属性，但是使用它的当前值来创建新的动画或者在动画发生时与 layers 交互是非常有用的。
 
 By using `-[CALayer presentationLayer]` and `-[CALayer modelLayer]`, you can switch between the two layer hierarchies with ease.
-使用 `-[CALayer presentationLayer]` 和 `-[CALayer modelLayer]`，你可以在两个 layer 之间轻松切换。
+通过使用 `-[CALayer presentationLayer]` 和 `-[CALayer modelLayer]`，你可以在两个 layer 之间轻松切换。
 
 ## A Basic Animation
 ## 基本动画
@@ -52,17 +51,17 @@ By using `-[CALayer presentationLayer]` and `-[CALayer modelLayer]`, you can swi
 Probably the most common case is to animate a view's property from one value to another. Consider this example:
 可能最常见的情况是将一个 view 的属性从一个值改变为另一个值，考虑下面这个例子：
 
-<center><img src="{{site.images_path}}/issue-12/rocket-linear@2x.gif" width="400px"></center>
+<center><img src="img.objccn.io/issue-12/rocket-linear.gif" width="400px"></center>
 
 Here, we animate our little red rocket from an x-position of `77.0` to one of `455.0`, which is just beyond the edge of its parent view. In order to fill in all the steps along the way, we need to determine where our rocket is going to be at any given point in time. This is commonly done using linear interpolation:
-在这里，我们让红色小火箭的 x-position 从 `77.0` 变为 `455.0`，刚好超过它的 parent view 的边。为了填充所有路径，我们需要确定我们的火箭及时到达了所有给定的点。这通常使用线性内插法来完成。
+在这里，我们让红色小火箭的 x-position 从 `77.0` 变为 `455.0`，刚好超过它的 parent view 的边。为了填充所有路径，我们需要确定我们的火箭及时到达了所有给定的点。这通常使用线性插值法来完成。
 
 <center>
     <img src="{{site.images_path}}/issue-12/lerp.png" width="135">
 </center>
 
 That is, for a given fraction of the animation `t`, the x-coordinate of the rocket is the x-coordinate of the starting point `77`, plus the distance to the end point `∆x = 378`, multiplied with said fraction.
-也就是说，对于动画 `t`给定的一个分数，火箭的 x 坐标是 起始点的 x 坐标`77`，加上一个到终点的距离 `∆x = 378`，乘以所说的分数。//!!!!
+也就是说，因为动画 `t` 给定了一个分数，火箭的 x 坐标就是起始点的 x 坐标 `77`，加上一个到终点的距离 `∆x = 378`，乘以所说的分数。
 
 Using `CABasicAnimation`, we can implement this animation as follows:
 使用 `CABasicAnimation`，我们可以如下实现这个动画：
@@ -76,22 +75,22 @@ Using `CABasicAnimation`, we can implement this animation as follows:
     [rocket.layer addAnimation:animation forKey:@"basic"];
 
 Note that the key path we animate, `position.x`, actually contains a member of the `CGPoint` struct stored in the `position` property. This is a very convenient feature of Core Animation. Make sure to check [the complete list of supported key paths](https://developer.apple.com/library/ios/documentation/Cocoa/Conceptual/CoreAnimation_guide/Key-ValueCodingExtensions/Key-ValueCodingExtensions.html).
-请注意我们运动的关键路径， `position.x`，实际上包含一个存储在`position`属性中的`CGPoint`结构的成员。这是Core Animation一个非常方便的特征。请务必查看[the complete list of supported key paths](https://developer.apple.com/library/ios/documentation/Cocoa/Conceptual/CoreAnimation_guide/Key-ValueCodingExtensions/Key-ValueCodingExtensions.html)。
+请注意我们驱动的关键路径， `position.x`，实际上包含一个存储在 `position` 属性中的 `CGPoint` 结构的成员。这是 Core Animation 一个非常方便的特性。请务必查看 [支持关键路径的完整列表](https://developer.apple.com/library/ios/documentation/Cocoa/Conceptual/CoreAnimation_guide/Key-ValueCodingExtensions/Key-ValueCodingExtensions.html)。
 
 However, when we run this code, we realize that our rocket jumps back to its initial position as soon as the animation is complete. This is because, by default, the animation will not modify the presentation layer beyond its duration. In fact, it will even be removed completely at this point.
-然而，当我们运行该代码时，我们意识到火箭在完成动画后马上跳回了初始位置。这是因为在默认情况下，动画不会超出持续时间修改表示层。实际上，它甚至会被彻底的移除。
+然而，当我们运行该代码时，我们意识到火箭在完成动画后马上回到了初始位置。这是因为在默认情况下，动画不会超出持续时间修改 presentation layer。实际上，在结束时刻它甚至会被彻底移除。
 
 Once the animation is removed, the presentation layer will fall back to the values of the model layer, and since we've never modified that layer's `position`, our spaceship reappears right where it started.
-一旦动画被移除，表示层将回到模型层的值，并且因为我们从未修改该 layer 的 `position`，我们的飞船将重新出现在它开始的地方。
+一旦动画被移除，presentation layer 将回到 model layer 的值，并且因为我们从未修改该 layer 的 `position`，我们的飞船将重新出现在它开始的地方。
 
 There are two ways to deal with this issue:
-这里有两种解决则会个问题的方法：
+这里有两种解决这个问题的方法：
 
 The first approach is to update the property directly on the model layer. This is usually the best approach, since it makes the animation completely optional.
-第一种方法是直接在模型层上更新属性。这通常是最好的方法，因为它使得动画完全可选。
+第一种方法是直接在 model layer 上更新属性。这通常是最好的方法，因为它使得动画完全可选。
 
 Once the animation completes and is removed from the layer, the presentation layer will fall through to the value that is set on the model, which matches the last step of the animation:
-一旦动画完成并且从 layer 中移除，表示层将下降到与动画最后一个步骤相匹配的模型层设置的值。
+一旦动画完成并且从 layer 中移除，presentation layer 将回到与动画最后一个步骤相匹配的 model layer 设置的值。
 
     CABasicAnimation *animation = [CABasicAnimation animation];
     animation.keyPath = @"position.x";
@@ -104,7 +103,7 @@ Once the animation completes and is removed from the layer, the presentation lay
     rocket.layer.position = CGPointMake(455, 61);
 
 Alternatively, you can tell the animation to remain in its final state by setting its `fillMode` property to ` kCAFillModeForward` and prevent it from being automatically removed by setting `removedOnCompletion` to `NO`:
-或者，你可以告诉动画通过设置它的 `fillMode` 属性为 ` kCAFillModeForward` 以留在最终状态，并设置`removedOnCompletion` 为 `NO` 以防止它被自动移除。
+或者，你可以通过设置动画的 `fillMode` 属性为 ` kCAFillModeForward` 以留在最终状态，并设置`removedOnCompletion` 为 `NO` 以防止它被自动移除。
 
     CABasicAnimation *animation = [CABasicAnimation animation];
     animation.keyPath = @"position.x";
@@ -118,7 +117,7 @@ Alternatively, you can tell the animation to remain in its final state by settin
     [rectangle.layer addAnimation:animation forKey:@"basic"];
 
 It's worth pointing out that the animation object we create is actually copied as soon as it is added to the layer. This is useful to keep in mind when reusing animations for multiple views. Let's say we have a second rocket that we want to take off shortly after the first one:
-值得指出的是，实际上我们创建的动画对象在被添加到 layer 时马上就复制了一份。要牢记，在多个 veiw 重用动画时这非常有用。比方说我们想要第二个火箭在第一个火箭起飞不久后起飞。
+值得指出的是，实际上我们创建的动画对象在被添加到 layer 时马上就复制了一份。要牢记，在多个 view 中重用动画时这非常有用。比方说我们想要第二个火箭在第一个火箭起飞不久后起飞：
 
     CABasicAnimation *animation = [CABasicAnimation animation];
     animation.keyPath = @"position.x";
@@ -134,13 +133,13 @@ It's worth pointing out that the animation object we create is actually copied a
     rocket2.layer.position = CGPointMake(455, 111);
 
 Setting the `beginTime` of the animation 0.5 seconds into the future will only affect `rocket2`, since the animation was copied by `[rocket1.layer addAnimation:animation forKey:@"basic"];`, and further changes to the animation object are not taken into account by `rocket1`.
-设置动画的 `beginTime` 为未来的0.5 秒将只会影响 `rocket2`，因为动画在执行语句 `[rocket1.layer addAnimation:animation forKey:@"basic"];` 时已经被复制了，并且之后对动画对象的改变也不会考虑 `rocket1`。//！！！！
+设置动画的 `beginTime` 为未来0.5 秒将只会影响 `rocket2`，因为动画在执行语句 `[rocket1.layer addAnimation:animation forKey:@"basic"];` 时已经被复制了，并且之后 `rocket1` 也不会考虑对动画对象的改变。
 
 Check out David's [excellent article on animation timing](http://ronnqvi.st/controlling-animation-timing/) to learn how to have even more fine-grained control over your animations.
 不妨看一看 David 的 [关于定时函数的杰出文章](http://ronnqvi.st/controlling-animation-timing/) ，去学习如何更精确的控制你的动画。
 
 I've also decided to use `CABasicAnimation`'s `byValue` property, which creates an animation that starts from the current value of the presentation layer and ends at that value plus `byValue`. This makes the animation easier to reuse, since you don't need to specify the precise `from-` and `toValue` that you may not know ahead of time.
-我也已经决定使用 `CABasicAnimation` 的 `byValue` 属性，创建一个动画，这个动画从 presentation layer 的当前值开始，当前值加上 `byValue`的值结束。这使得动画更易于复用，因为你不需要精确的指定可能暂时不知道的 `from-` 和 `toValue` 的值。
+我决定使用 `CABasicAnimation` 的 `byValue` 属性创建一个动画，这个动画从 presentation layer 的当前值开始，当前值加上 `byValue` 的值结束。这使得动画更易于重用，因为你不需要精确的指定可能暂时不知道的 `from-` 和 `toValue` 的值。
 
 Different combinations of `fromValue`, `byValue`, and `toValue` can be used to achieve different effects, and it's worth [consulting the documentation](https://developer.apple.com/library/ios/documentation/GraphicsImaging/Reference/CABasicAnimation_class/Introduction/Introduction.html#//apple_ref/doc/uid/TP40004496-CH1-SW4) if you need to create animations that can be reused across your app.
  `fromValue`, `byValue` 和 `toValue` 的不同组合可以用来实现不同的效果，你值得 [查看文档](https://developer.apple.com/library/ios/documentation/GraphicsImaging/Reference/CABasicAnimation_class/Introduction/Introduction.html#//apple_ref/doc/uid/TP40004496-CH1-SW4) ，如果你需要创建一个可以在你的应用程序中重用的动画。
