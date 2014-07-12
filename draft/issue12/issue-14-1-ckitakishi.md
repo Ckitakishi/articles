@@ -9,6 +9,7 @@ tags: article
 
 
 When adding AppleScript support — which is also JavaScript support, as of OS X 10.10 — it’s best to start with your app’s data. Scripting isn’t a matter of automating button clicks; it’s about exposing the model layer to people who could use your app in their workflows.
+截至 OS X 10.10，当添加 AppleScript 支持，也可以说是 JavaScript 支持时，最好以你 app 的数据作为开始。脚本不是自动按钮点击；而是关于向可以在他们的工作流中使用你的 app 的人暴露 model layer (模型层)。 
 
 While that’s usually a small minority of users, they’re power users — the kind of people who recommend apps to friends and family. They blog and tweet about apps, and people listen to them. They can be your app’s biggest evangelists.
 
