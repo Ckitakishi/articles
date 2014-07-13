@@ -9,31 +9,42 @@ tags: article
 
 
 When adding AppleScript support — which is also JavaScript support, as of OS X 10.10 — it’s best to start with your app’s data. Scripting isn’t a matter of automating button clicks; it’s about exposing the model layer to people who could use your app in their workflows.
-截至 OS X 10.10，当添加 AppleScript 支持，也可以说是 JavaScript 支持时，最好以你 app 的数据作为开始。脚本不是自动按钮点击；而是关于向可以在他们的工作流中使用你的 app 的人暴露 model layer (模型层)。 
+截至 OS X 10.10，当添加 AppleScript 支持，也可以说是 JavaScript 支持时，最好以你的应用数据作为开始。脚本并不是自动按钮点击；而是关于向可以在他们的工作流中使用你的应用的人暴露 model layer (模型层)。 
 
 While that’s usually a small minority of users, they’re power users — the kind of people who recommend apps to friends and family. They blog and tweet about apps, and people listen to them. They can be your app’s biggest evangelists.
+虽然通常这样的用户极少，他们是高级用户，会像朋友和家人推荐应用。他们的博客和 twitter 上有关于应用的内容，而且人们关注了他们。他们会成为你的应用的最大传播者。
 
 Overall, the best reason to add scripting support is that it’s a matter of professionalism. But it doesn’t hurt that the effort is worth the reward.
+总体而言，添加脚本支持的最大原因是它的的专业性因素。但是它不违背努力值得回报。
 
 ## Noteland
 
 Noteland is an app without any UI except for a blank window — but it has a model layer, and it’s scriptable. You can [find it on GitHub](https://github.com/objcio/issue-14-scriptable-apps) and follow along.
+Noteland 是一个没有任何除了空白窗口之外的 UI 的应用，但是它有 model layer，并且是脚本化的。你可以在 [GitHub](https://github.com/objcio/issue-14-scriptable-apps) 上关注它。
 
 It supports AppleScript (and JavaScript on 10.10). It’s written in Objective-C in Xcode 5.1.1. We initially tried to use Swift and Xcode 6 Beta 2, but ran into snags, though it’s entirely likely they were our own fault, since we’re still learning Swift.
+它支持 AppleScript（10.10上也支持JavaScript）。它在 Xcode 5.1.1 中用 Objective-C 完成。我们最初试图使用 Swift 和 Xcode 6 Beta 2，但是它出现了困难，虽然这完全可能是我们自己的错误，因为我们仍然在学习 Swift。
 
 ### Noteland’s Object Model
+### Noteland 的对象模型
 
 There are two classes: notes and tags. There may be multiple notes, and a note may have multiple tags.
+有两个类，notes 和 tags。可能有多个笔记，而且一个笔记也许有多个标签。
 
 NLNote.h declares several properties: `uniqueID`, `text`, `creationDate`, `archived`, `tags`, and a read-only `title` property.
+NLNote.h 声明了几个属性: `uniqueID`, `text`, `creationDate`, `archived`, `tags`, 和一个只读的 `title` 属性。
 
 Tags are simpler. NLTag.h declares two scriptable properties: `uniqueID` and `name`.
+Tags 类更加简单。NLTag.h 声明了两个脚本化属性: `uniqueID` 和 `name`.
 
 We want users to be able to create, edit, and delete notes and tags, and to be able to access and change all of their properties, with the exception of any that are read-only.
+我们希望用户能够创建，编辑和删除笔记和标签，并且能够访问和改变除了只读以外的属性。
 
 ### Scripting Definition File (.sdef)
+### 脚本定义文件(.sdef)
 
 The first step is to define the scripting interface — it’s conceptually like creating a .h file for scripters, but in a format that AppleScript understands.
+第一步是定义脚本接口。
 
 In the past, we’d create and edit an aete resource (“aete” stands for Apple Event Terminology.) These days it’s much easier: we create and edit an sdef (scripting definition) XML file.
 
