@@ -44,28 +44,36 @@ We want users to be able to create, edit, and delete notes and tags, and to be a
 ### 脚本定义文件(.sdef)
 
 The first step is to define the scripting interface — it’s conceptually like creating a .h file for scripters, but in a format that AppleScript understands.
-第一步是定义脚本接口。
+第一个步骤是定义脚本接口，概念上可以理解为为脚本创建一个 .h 文件，但是以 AppleScript 能够识别的格式。
 
 In the past, we’d create and edit an aete resource (“aete” stands for Apple Event Terminology.) These days it’s much easier: we create and edit an sdef (scripting definition) XML file.
+过去，我们需要创建和编辑 aete 资源（“aete” 代表 Apple Event Terminology）。现在这将更加容易：我们可以创建一个 sdef （脚本定义）XML 文件。
 
 You might think you’d prefer JSON or a plist, but XML is a decent match for this — beats an aete resource hands-down, at least. In fact, there was a plist version for a while, but it required *two* different plists that you had to keep in sync. It was a pain.
+你可能更倾向于使用 JSON 或者 plist，但是 XML 在这里会更加合适，至少它毫无疑问战胜了 aete 资源。事实上，曾有一段时间有 plist 版本，但是它要求你保持 *两个* 不同的 plist 同步。这非常痛苦。
 
 The original name of the resource points to a matter worth noting. An Apple event is the low-level message that AppleScript generates, sends, and receives. It’s an interesting technology on its own, and has uses outside of scripting support. Additionally, it’s been around since System 7 in the early ’90s, and has survived the transition to OS X.
+资源点的原始名称值得注意。Apple event 是 AppleScript 生成，发送和接受低级别的消息。 这本身是一种很有趣的技术，而且有脚本支持以外的用途。除此之外，在 90 年代初从系统 7 开始一直围绕它，并且一直存在到过渡到 OS X。
 
 (Speculation: Apple events survived because so many print publishers relied on AppleScript, and publishers were among Apple’s most loyal customers during the 'dark days,' in the middle and late ’90s.)
+（猜测：Apple event 的存活是由于很多印刷出版商依赖 AppleScript，在 90 年代中后期的 '黑暗日子' 中，出版商们是 Apple 最忠诚的用户。）
 
 An sdef file always starts with the same header:
+sdef 文件总是以同样的头部作为开始：
 
     <?xml version="1.0" encoding="UTF-8"?>
     <!DOCTYPE dictionary SYSTEM "file://localhost/System/Library/DTDs/sdef.dtd">
 
 The top-level item is a dictionary — “dictionary” is AppleScript’s word for a scripting interface. Inside the dictionary you'll find one or more suites.
+顶级的元素是字典，“字典” 是 AppleScript 的一个脚本接口。在字典中你会发现一个或多个套件。
 
 (Tip: open AppleScript Editor and choose File > Open Dictionary… You’ll see a list of apps with scripting dictionaries. If you choose one — iTunes, for instance — you’ll see the classes, properties, and commands that iTunes understands.)
+（提示：打开 AppleScript Editor，然后选择 File > Open Dictionary...你会看到有脚本字典的应用列表。如果你选择 iTunes 作为例子，你会看到类，属性和 iTunes 能识别的命令。）
 
     <dictionary title="Noteland Terminology">
 
 #### Standard Suite
+#### 标准配置
 
 The standard suite defines classes and commands all applications should support. It includes quitting, closing windows, making and deleting objects, querying objects, and so on.
 
