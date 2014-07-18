@@ -243,58 +243,80 @@ Also note that the notes array property is declared in the .m file in the class 
 #### NLNote 类
 
 NLNote.h declares the various properties of a note: `uniqueID`, `text`, `creationDate`, `archived`, `title`, and `tags`.
+NLNote.h 声明了笔记的各个属性： `uniqueID`, `text`, `creationDate`, `archived`, `title`, 和 `tags`。
 
 The `init` method sets the `uniqueID` and `creationDate` and sets the tags array to an empty `NSArray`. We're using an `NSArray` this time, rather than an `NSMutableArray`, just to show it can be done.)
-
+在 `init` 方法中设置 `uniqueID` 和 `creationDate`，还有将标签数组设为空的 `NSArray`。这次我们使用 `NSArray` 而不是 `NSMutableArray`，仅仅为了说明它也可以达到目的。
+ 
 The `title` method returns a calculated value: the first line of the text of the note. (Recall that this becomes the `name` to the scripting dictionary.)
+`tilte` 方法返回一个计算后的值：笔记中文本的第一行。（回想一下，则会成为了脚本字典的 `name`。）
 
 The method to note is the `objectSpecifier` method. This is critical to your classes; scripting support needs this so it understands your objects.
+要注意 `objectSpecifier` 方法。这是类的关键；脚本支持需要这个使其能够理解你的对象。
 
 Luckily this method is easy to write. Though there are different types of object specifiers, it’s usually best to use `NSUniqueIDSpecifier`, since it’s stable. (Other options include `NSNameSpecifier`, `NSPositionalSpecifier`, and so on.)
+幸运的是，这个方法很容易实现。虽然对象说明符有不同类型，通常最好使用 `NSUniqueIDSpecifier`，因为它很稳定。（其它选项包括：`NSNameSpecifier`, `NSPositionalSpecifier` 等。）
 
 The object specifier needs to know about the container, and the container is the top-level Application object.
+对象说明符需要了解容器相关的东西，而且容器是顶级应用的对象。
 
 The code looks like this:
+代码如下所示：
 
     NSScriptClassDescription *appDescription = (NSScriptClassDescription *)[NSApp classDescription];
     return [[NSUniqueIDSpecifier alloc] initWithContainerClassDescription:appDescription containerSpecifier:nil key:@"notes" uniqueID:self.uniqueID];
 
 `NSApp` is the global application object; we get its `classDescription`. The key is `@"notes"`, a nil `containerSpecifier` refers to the top-level (app) container, and the `uniqueID` is the note’s `uniqueID`.
+`NSApp` 是全局应用的对象；我们获取它的 `classDescription`。键为 `@"notes"`，`containerSpecifier` 为 nil 指的是顶级（应用）的容器， `uniqueID` 是笔记的 `uniqueID`。
 
 #### Note as Container
+#### Note 作为容器
 
 We have to think ahead a little bit. Tags will need an `objectSpecifier` also, and tags are contained by notes — so a tag needs a reference to its containing note.
+我们需要超前考虑一点。标签也会需要 `objectSpecifier`，而且笔记是标签的容器，所以标签需要引用它的容器--笔记。
 
 Cocoa scripting handles creating tags, but there’s a method we can override that lets us customize the behavior.
+Cocoa 脚本处理创建标签，但是我们可以重写让自己自定义行为的方法。
 
 NSObjectScripting.h defines `-newScriptingObjectOfClass:forValueForKey: withContentsValue:properties:`. That’s what we need. In NLNote.m, it looks like this:
+NSObjectScripting.h 定义了 `-newScriptingObjectOfClass:forValueForKey: withContentsValue:properties:`。这正是我们需要的。在 NLNote.m 中，它是下面这样的：
 
     NLTag *tag = (NLTag *)[super newScriptingObjectOfClass:objectClass forValueForKey:key withContentsValue:contentsValue properties:properties];
     tag.note = self;
     return tag;
 
 We create the tag using super’s implementation, then set the tag’s `note` property to the note. To avoid a possible retain cycle, NLTag.h makes the note a weak property.
+我们使用父类的接口创建标签，然后设置标签的 `note` 属性为该笔记。为了避免可能的 retain 周期，NLTag.h 的 note 是 weak 属性。
 
 (You might think this is a bit inelegant, and we’d agree. We wish instead that containers were asked for the `objectSpecifiers` for their children. Something like `objectSpecifierForScriptingObject:` would be better. We filed a bug: [rdar://17473124](rdar://17473124).)
+（你可能认为这并不太不优雅，我们同意这么说。我们希望取代那种为了子类的 `objectSpecifiers` 而需要 `objectSpecifiers` 的容器。像是 `objectSpecifierForScriptingObject:` 这样可能会更好。我们提出了一个 bug[rdar://17473124](rdar://17473124)。）
 
 #### NLTag Class
+#### NLTag 类
 
 `NLTag` has `uniqueID`, `name`, and `note` properties.
+`NLTag` 有 `uniqueID`, `name`, 和 `note` 属性。
 
 `NLTag`’s `objectSpecifier` is conceptually the same as the code in `NLNote`, except that the container is a note rather than the top-level application class.
+`NLTag` 的 `objectSpecifier` 在概念上和 `NLNote`中的代码相同，除了容器是一个笔记而不是顶级应用类。
 
 It looks like this:
+如下所示：
 
     NSScriptClassDescription *noteClassDescription = (NSScriptClassDescription *)[self.note classDescription];
     NSUniqueIDSpecifier *noteSpecifier = (NSUniqueIDSpecifier *)[self.note objectSpecifier];
     return [[NSUniqueIDSpecifier alloc] initWithContainerClassDescription:noteClassDescription containerSpecifier:noteSpecifier key:@"tags" uniqueID:self.uniqueID];
 
 That’s it. Done. That’s not much code — most of the work is in designing the interface and editing the sdef file.
+就是这样。完成了。并没有太多代码，大量的工作都是设计 interface 和编辑 sdef 文件。
 
 In the old days, you’d still be writing Apple event handlers and working with Apple event descriptors and all kinds of crazy jazz. In other words, you’d be a long way from done. Thankfully, these aren’t the old days.
+在过去，你需要编写 Apple event 处理程序，并与 Apple event 描述符和各种疯狂的爵士乐一起工作。换句话说，要完成这些你需要走很长的路。值得庆幸的是，已经不是过去的日子了。 
 
 The fun part is next.
+下一个部分会很有趣。
 
+### AppleScript Editor
 ### AppleScript Editor
 
 Launch Noteland. Launch /Applications/Utilities/AppleScript Editor.app.
