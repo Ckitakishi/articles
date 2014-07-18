@@ -320,38 +320,48 @@ The fun part is next.
 ### AppleScript Editor
 
 Launch Noteland. Launch /Applications/Utilities/AppleScript Editor.app.
+启动 Noteland。启动 /Applications/Utilities/AppleScript Editor.app。
 
 Run the following script:
+运行下面的脚本：
 
     tell application "Noteland"
         every note
     end tell
 
 In the Result pane at the bottom, you’ll see something like this:
+在底部的结果窗口中，你会看到下面这样的信息：
 
     {note id "0B0A6DAD-A4C8-42A0-9CB9-FC95F9CB2D53" of application "Noteland", note id "F138AE98-14B0-4469-8A8E-D328B23C67A9" of application "Noteland"}
 
 The IDs will be different, of course, but this is an indication that it’s working.
+当然，ID 会有所不同，但是这是迹象表明，它在工作。
 
 Try this script:
+试一试这个脚本：
 
     tell application "Noteland"
         name of every note
     end tell
 
 You’ll see `{"Note 0", "Note 1"}` in the Result pane.
+你会在结果窗中看到 `{"Note 0", "Note 1"}`。
 
 Try this script:
+再试一下这个脚本：
 
     tell application "Noteland"
         name of every tag of note 2
     end tell
 
 Result: `{"Tiger Swallowtails", "Steak-frites"}`.
+结果：`{"Tiger Swallowtails", "Steak-frites"}`。
 
 (Note that AppleScript arrays are 1-based, so note 2 refers to the second note. Which doesn’t sound so crazy when we put it that way.)
+（请注意 AppleScript 数组是基于 1 的，所以 2 指的是第二个笔记。当我们这样说时，听起来并不疯狂）
 
 You can also create notes:
+你也可以创建一个笔记：
 
     tell application "Noteland"
         set newNote to make new note with properties {body:"New Note" & linefeed & "Some text.", archived:true}
@@ -359,10 +369,12 @@ You can also create notes:
     end tell
 
 The result will be something like this (with appropriate details changed):
+结果将会是类似这样的（详细信息有相应改变）：
 
     {creationDate:date "Thursday, June 26, 2014 at 1:42:08 PM", archived:true, name:"New Note", class:note, id:"49D5EE93-655A-446C-BB52-88774925FC62", body:"New Note\nSome text."}`
 
 And you can create new tags:
+你还可以创建新的标签：
 
     tell application "Noteland"
         set newNote to make new note with properties {body:"New Note" & linefeed & "Some text.", archived:true}
@@ -371,10 +383,13 @@ And you can create new tags:
     end tell
 
 The result will be: `{"New Tag"}`.
+结果会是：`{"New Tag"}`。
 
 It works!
+这是可行的！
 
 ### More to Learn
+### 扩展
 
 Scripting the object model is just part of adding scripting support; you can add support for commands, too. For instance, Noteland could have an export command that writes notes to files on disk. An RSS reader might have a refresh command, a Mail app might have a download mail command, and so on.
 
@@ -385,6 +400,8 @@ There’s a session in the [WWDC 2014 videos](https://developer.apple.com/videos
 And of course, Apple has documentation on the various technologies:
 
 - [Cocoa Scripting Guide](https://developer.apple.com/library/mac/documentation/Cocoa/Conceptual/ScriptableCocoaApplications/SApps_intro/SAppsIntro.html#//apple_ref/doc/uid/TP40002164)
+- [Cocoa 脚本指南](https://developer.apple.com/library/mac/documentation/Cocoa/Conceptual/ScriptableCocoaApplications/SApps_intro/SAppsIntro.html#//apple_ref/doc/uid/TP40002164)
 - [AppleScript Overview](https://developer.apple.com/library/mac/documentation/applescript/conceptual/applescriptx/AppleScriptX.html#//apple_ref/doc/uid/10000156-BCICHGIE)
+- [AppleScript 概览](https://developer.apple.com/library/mac/documentation/applescript/conceptual/applescriptx/AppleScriptX.html#//apple_ref/doc/uid/10000156-BCICHGIE)
 
 Also, see Apple’s Sketch app for an example of an app that implements scripting.
