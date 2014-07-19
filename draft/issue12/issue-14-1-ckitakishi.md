@@ -392,12 +392,16 @@ It works!
 ### 扩展
 
 Scripting the object model is just part of adding scripting support; you can add support for commands, too. For instance, Noteland could have an export command that writes notes to files on disk. An RSS reader might have a refresh command, a Mail app might have a download mail command, and so on.
+将对象模型脚本化是是添加脚本支持的一部分；你也可以为命令添加支持。例如，Noteland 可以有一个将笔记写到硬盘文件的导出命令。RSS 阅读器可能有一个刷新命令，邮件应用可能有下载邮件命令，等等。
 
 Matt Neuburg’s [AppleScript: The Definitive Guide](http://www.amazon.com/AppleScript-Definitive-Guide-Matt-Neuburg/dp/0596102119/ref=la_B001H6OITU_1_1?s=books&ie=UTF8&qid=1403816403&sr=1-1) is worth checking out even though it was published in 2006, as things haven’t changed much since then. Matt also has a [tutorial on adding scripting support to Cocoa apps](http://www.apeth.net/matt/scriptability/scriptabilityTutorial.html). It's definitely worth reading, and it goes into more detail than this article.
+Matt Neuburg 的 [AppleScript 权威指南](http://www.amazon.com/AppleScript-Definitive-Guide-Matt-Neuburg/dp/0596102119/ref=la_B001H6OITU_1_1?s=books&ie=UTF8&qid=1403816403&sr=1-1) 值得一读，尽管它是 2006 年出版的，因为从那以后并没有发生太大的改变。Matt 还写有一篇 [Cocoa 应用添加脚本支持的教程](http://www.apeth.net/matt/scriptability/scriptabilityTutorial.html)。该教程绝对值得一读，它比这篇文章更加详细。
 
 There’s a session in the [WWDC 2014 videos](https://developer.apple.com/videos/wwdc/2014/) on JavaScript for Automation, which talks about the new JavaScript OSA language. (Years ago, Apple suggested that one day there would be a programmer’s dialect of AppleScript, since the natural language thing is a bit weird for people who write in C and C-like languages. JavaScript could be considered the programmer’s dialect.)
+这有一个 [WWDC 2014 Session 的视频](https://developer.apple.com/videos/wwdc/2014/),关于 JavaScript 的自动化，其中谈到了新的 JavaScript OSA 语言。（多年以前 Apple 曾提出，总有一天会出现 AppleScript 的程序员的特有语言，因为自然语言对写 C 和 C 类语言的人说略有一点怪。JavaScript 可以被认为是程序员的特有语言。）
 
 And of course, Apple has documentation on the various technologies:
+当然，Apple 有关于这些技术的文档：
 
 - [Cocoa Scripting Guide](https://developer.apple.com/library/mac/documentation/Cocoa/Conceptual/ScriptableCocoaApplications/SApps_intro/SAppsIntro.html#//apple_ref/doc/uid/TP40002164)
 - [Cocoa 脚本指南](https://developer.apple.com/library/mac/documentation/Cocoa/Conceptual/ScriptableCocoaApplications/SApps_intro/SAppsIntro.html#//apple_ref/doc/uid/TP40002164)
@@ -405,3 +409,4 @@ And of course, Apple has documentation on the various technologies:
 - [AppleScript 概览](https://developer.apple.com/library/mac/documentation/applescript/conceptual/applescriptx/AppleScriptX.html#//apple_ref/doc/uid/10000156-BCICHGIE)
 
 Also, see Apple’s Sketch app for an example of an app that implements scripting.
+此外，请参阅 Apple 的一个素描应用，它实现了脚本化。
