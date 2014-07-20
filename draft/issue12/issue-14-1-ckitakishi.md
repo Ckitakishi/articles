@@ -9,27 +9,27 @@ tags: article
 
 
 When adding AppleScript support — which is also JavaScript support, as of OS X 10.10 — it’s best to start with your app’s data. Scripting isn’t a matter of automating button clicks; it’s about exposing the model layer to people who could use your app in their workflows.
-截至 OS X 10.10，当添加 AppleScript 支持，也可以说是 JavaScript 支持时，最好以你的应用数据作为开始。脚本并不是自动按钮点击；而是关于向可以在他们的工作流中使用你的应用的人暴露 model layer (模型层)。 
+当添加 AppleScript 支持的时候，OS X 10.10 中也可以是 JavaScript 支持，最好以你的应用数据作为开始。脚本并不是自动按钮点击；而是关于向可以在他们的工作流中使用你的应用的人暴露 model layer (模型层)。 
 
 While that’s usually a small minority of users, they’re power users — the kind of people who recommend apps to friends and family. They blog and tweet about apps, and people listen to them. They can be your app’s biggest evangelists.
-虽然通常这样的用户极少，他们是高级用户，会像朋友和家人推荐应用。他们的博客和 twitter 上有关于应用的内容，而且人们关注了他们。他们会成为你的应用的最大传播者。
+有的用户会向朋友和家人推荐应用，虽然通常像这样的用户极少，但是他们是超级用户。他们的博客和 twitter 上有关于应用的内容，人们关注了他们。他们会成为你的应用的最大传播者。
 
 Overall, the best reason to add scripting support is that it’s a matter of professionalism. But it doesn’t hurt that the effort is worth the reward.
-总体而言，添加脚本支持的最大原因是它的的专业性因素。但是它不违背努力值得回报。
+总体而言，添加脚本支持最重要的原因是它的的专业性因素。不过它不违背努力是值得回报的。
 
 ## Noteland
 
 Noteland is an app without any UI except for a blank window — but it has a model layer, and it’s scriptable. You can [find it on GitHub](https://github.com/objcio/issue-14-scriptable-apps) and follow along.
-Noteland 是一个没有任何除了空白窗口之外的 UI 的应用，但是它有 model layer，并且是脚本化的。你可以在 [GitHub](https://github.com/objcio/issue-14-scriptable-apps) 上关注它。
+Noteland 是一个除了空白窗口之外没有任何 UI 的应用，但是它有 model layer，并且是脚本化的。你可以在 [GitHub](https://github.com/objcio/issue-14-scriptable-apps) 上找到它。
 
 It supports AppleScript (and JavaScript on 10.10). It’s written in Objective-C in Xcode 5.1.1. We initially tried to use Swift and Xcode 6 Beta 2, but ran into snags, though it’s entirely likely they were our own fault, since we’re still learning Swift.
-它支持 AppleScript（10.10上也支持JavaScript）。它在 Xcode 5.1.1 中用 Objective-C 完成。我们最初试图使用 Swift 和 Xcode 6 Beta 2，但是它出现了困难，虽然这完全可能是我们自己的错误，因为我们仍然在学习 Swift。
+Noteland 支持 AppleScript（10.10上还支持 JavaScript）。它是在 Xcode 5.1.1 中用 Objective-C 写的。我们最初试图使用 Swift 和 Xcode 6 Beta 2，但是出现了困难，虽然这完全可能是我们自己的错误，毕竟我们仍然在学习 Swift。
 
 ### Noteland’s Object Model
 ### Noteland 的对象模型
 
 There are two classes: notes and tags. There may be multiple notes, and a note may have multiple tags.
-有两个类，notes 和 tags。可能有多个笔记，而且一个笔记也许有多个标签。
+有两个类，notes（笔记） 和 tags（标签）。可能有多个笔记，而且一个笔记也许有多个标签。
 
 NLNote.h declares several properties: `uniqueID`, `text`, `creationDate`, `archived`, `tags`, and a read-only `title` property.
 NLNote.h 声明了几个属性: `uniqueID`, `text`, `creationDate`, `archived`, `tags`, 和一个只读的 `title` 属性。
@@ -47,16 +47,16 @@ The first step is to define the scripting interface — it’s conceptually like
 第一个步骤是定义脚本接口，概念上可以理解为为脚本创建一个 .h 文件，但是以 AppleScript 能够识别的格式。
 
 In the past, we’d create and edit an aete resource (“aete” stands for Apple Event Terminology.) These days it’s much easier: we create and edit an sdef (scripting definition) XML file.
-过去，我们需要创建和编辑 aete 资源（“aete” 代表 Apple Event Terminology）。现在这将更加容易：我们可以创建一个 sdef （脚本定义）XML 文件。
+过去，我们需要创建和编辑 aete 资源（“aete” 代表 Apple Event Terminology）。现在容易了很多：我们可以创建一个 sdef （脚本定义）XML 文件。
 
 You might think you’d prefer JSON or a plist, but XML is a decent match for this — beats an aete resource hands-down, at least. In fact, there was a plist version for a while, but it required *two* different plists that you had to keep in sync. It was a pain.
 你可能更倾向于使用 JSON 或者 plist，但是 XML 在这里会更加合适，至少它毫无疑问战胜了 aete 资源。事实上，曾有一段时间有 plist 版本，但是它要求你保持 *两个* 不同的 plist 同步。这非常痛苦。
 
 The original name of the resource points to a matter worth noting. An Apple event is the low-level message that AppleScript generates, sends, and receives. It’s an interesting technology on its own, and has uses outside of scripting support. Additionally, it’s been around since System 7 in the early ’90s, and has survived the transition to OS X.
-资源点的原始名称值得注意。Apple event 是 AppleScript 生成，发送和接受低级别的消息。 这本身是一种很有趣的技术，而且有脚本支持以外的用途。除此之外，在 90 年代初从 System 7 开始一直围绕它，并且一直存在到过渡到 OS X。
+资源点的原始名称值得注意。Apple event 是 AppleScript 生成，发送和接受的低级别消息。 这本身是一种很有趣的技术，而且有脚本支持以外的用途。除此之外，它从 90 年代初的 System 7 开始一直被围绕，而且一直存活到过渡为 OS X。
 
 (Speculation: Apple events survived because so many print publishers relied on AppleScript, and publishers were among Apple’s most loyal customers during the 'dark days,' in the middle and late ’90s.)
-（猜测：Apple event 的存活是由于很多印刷出版商依赖 AppleScript，在 90 年代中后期的 '黑暗日子' 中，出版商们是 Apple 最忠诚的用户。）
+（猜测：Apple event 的存活是由于很多印刷出版商依赖 AppleScript，在 90 年代中后期的 '黑暗日子' 中，出版商们是 Apple 最忠实的用户。）
 
 An sdef file always starts with the same header:
 sdef 文件总是以同样的头部作为开始：
@@ -65,7 +65,7 @@ sdef 文件总是以同样的头部作为开始：
     <!DOCTYPE dictionary SYSTEM "file://localhost/System/Library/DTDs/sdef.dtd">
 
 The top-level item is a dictionary — “dictionary” is AppleScript’s word for a scripting interface. Inside the dictionary you'll find one or more suites.
-顶级的元素是字典，“dictionary” 是 AppleScript 的一个脚本接口。在字典中你会发现一个或多个套件。
+顶级项是字典，“字典” 是 AppleScript 的一个脚本接口。在字典中你会发现一个或多个套件。
 
 (Tip: open AppleScript Editor and choose File > Open Dictionary… You’ll see a list of apps with scripting dictionaries. If you choose one — iTunes, for instance — you’ll see the classes, properties, and commands that iTunes understands.)
 （提示：打开 AppleScript Editor，然后选择 File > Open Dictionary...你会看到有脚本字典的应用列表。如果你选择 iTunes 作为例子，你会看到类，属性和 iTunes 能识别的命令。）
@@ -88,7 +88,7 @@ Paste it right below the `dictionary` element in your sdef.
 将它粘贴到你的 sdef 文件中 `dictionary` 元素的正下方。
 
 Then, in your sdef file, go through and delete everything that doesn’t apply. Noteland isn’t document-based and doesn’t print, so we removed the open and save commands, the document class, and everything to do with printing.
-然后，在你的 sdef 文件中，遍历并删除没有应用到的所有东西。Noteland 不基于文档且无需打印，所以我们去掉了打开和保存命令，文件类，以及与打印有关的一切。
+然后，在你的 sdef 文件中，遍历并删除所有没有应用到的东西。Noteland 不基于文档且无需打印，所以我们去掉了打开和保存命令，文件类，以及与打印有关的一切。
 
 (Tip: Xcode does a good job indenting XML. To re-indent, select all the text and choose the Editor > Structure > Re-Indent command.)
 （建议：Xcode 在 XML 的缩进方面做得很好，为了重新缩进，选中所有文本并且选择 Editor > Structure > Re-Indent。）
@@ -100,7 +100,7 @@ Once you’ve finished editing, use the command-line xmllint program — `xmllin
 #### Noteland 套件
 
 A single app-defined suite is usually best, though not mandated: you could have more than one when it makes sense. Noteland defines just one, the Noteland Suite:
-一个单一的应用定义套件通常是最好的，虽然并不是强制的：当它起作用时你可以有超过一个。Noteland 只定义一个，下面是 Noteland 套件：
+一个单一的应用定义套件通常是最好的，虽然并不强制：当它起作用时你可以有超过一个的套件。Noteland 只定义一个，下面是 Noteland 套件：
 
     <suite name="Noteland Suite" code="Note" description="Noteland-specific classes.">
 
@@ -108,20 +108,19 @@ A scripting dictionary expects things to be contained by other things. The top-l
 脚本字典预期的东西被包含在其他东西中。顶级容器是应用程序对象本身。
 
 In Noteland, its class name is `NLApplication`. You should always use the code `capp` for the application class: it’s a standard Apple event code. (Note that it’s also present in the standard suite.)
-在 Noteland 中，它的类名是 `NLApplication`。对于应用的类你应该总是使用代码 `capp` ：这是一个标准的 Apple event 代码。（注意它也存在于标准套件中。）
+在 Noteland 中，它的类名是 `NLApplication`。对于应用的类你应该总是使用编码 `capp` ：这是一个标准的 Apple event 编码。（注意它也存在于标准套件中。）
 
     <class name="application" code="capp" description="Noteland’s top level scripting object." plural="applications" inherits="application">
         <cocoa class="NLApplication"/>
 
 The application contains an array of notes. It’s important to differentiate elements (items there can be more than one of) and properties. In other words, an array in code should be an element in your dictionary:
-该应用包含一个笔记的数组。区分元素（这里可以有不止一个项目）和属性非常重要。换句话说，代码中的数据应该作为你的字典中的一个元素。
-
+该应用包含一个笔记的数组。区分元素（这里可以有不止一项）和属性非常重要。换句话说，代码中的数据应该作为你字典中的一个元素。
     <element type="note" access="rw">
         <cocoa key="notes"/>
     </element>`
 
 Cocoa scripting uses Key-Value Coding (KVC), and the dictionary specifies the key names.
-Cocoa 脚本使用 KVC，和字典指定的键值名。
+Cocoa 脚本使用 KVC，字典指定键的名称。
 
 #### Note Class
 #### Note 类
@@ -133,7 +132,7 @@ The code is `NOTE`. It could be almost anything, but note that Apple reserves al
 上面的编码是 `NOTE`。这几乎可以是任何东西，但是请注意，Apple 保留所有的小写编码供自己使用，所以 `note` 是不被允许的。它可以是 `NOT*`, 或 `NoTe`, 或 `XYzy`，或者任何你想要的。（理想情况下自己的编码不会与其他应用的编码冲突。但是我们没有办法确保这一点，所以我们只能够 *猜测*。也就是说， 猜想 `NOTE` 可能并不是一个很好的选择。）
 
 Your classes should inherit from `item`. (In theory you could have a class the inherits from another of your classes, but we’ve never tried this.)
-你的类应该继承自 `item`。（理论上，你可以让一个类继承自你的另一个类，但是我们没有做过这个尝试。）
+你的类应该继承自 `item`。（理论上，你可以让一个类继承自你的另一个类，不过我们没有做过这个尝试。）
 
 The note class has several properties:
 note 类有多个属性：
@@ -151,10 +150,10 @@ note 类有多个属性：
     <property name="archived" code="ARcv" description="Whether or not the note has been archived." type="boolean" access="rw"/>
 
 Whenever possible, it’s best to provide unique IDs for your objects. Otherwise, scripters have to rely on names and positions, which may change. Use the code 'ID  ' for unique IDs. (Note the two spaces; codes are four-character codes.) The name of the unique ID should always be `id`.
-如果可能，最好为你的对象提供独一无二的 ID。否则，脚本不得不依赖于名字和位置，这可能会改变，对唯一的 ID 使用编码 'ID  '。（注意前面的两个空格；编码应该是四个字符。）
+如果可能，最好为你的对象提供独一无二的 ID。否则，脚本不得不依赖于可能发生改变的名字和位置。对唯一的 ID 使用编码 'ID  '。（注意前面的两个空格；编码应该是四个字符。）
 
 It’s also standard to provide a `name` property, whenever it makes sense, and the code should be `pnam`. Noteland makes this a read-only property, since the name is just the first line of the text of a note, and the text of the note is edited via the read-write `body` property.
-当它有意义时，也标准的提供了 `name` 属性，编码应该是 `pnam`。Noteland 使得它是一个只读属性，因为名称只是笔记中文本的第一行，而且笔记的文本通过可读写属性 `body` 编辑。 
+只要它有意义，提供 `name` 属性也是标准的，编码应该是 `pnam`。Noteland 使得它是一个只读属性，因为名称只是笔记中文本的第一行，而且笔记的文本通过可读写属性 `body` 编辑。 
 
 For `creationDate` and `archived`, we don’t need to provide a Cocoa key element, since the key is the same as the property name.
 对于 `creationDate` 和 `archived`，我们并不需要提供 Cocoa 的键元素，因为键和属性名字相同。
@@ -163,7 +162,7 @@ Note the types: text, date, and boolean. AppleScript supports these and several 
 注意类型： text, date, 和 boolean。AppleScript 支持它们和其它几个，如 [listed in the documentation](https://developer.apple.com/library/mac/documentation/Cocoa/Conceptual/ScriptableCocoaApplications/SApps_about_apps/SAppsAboutApps.html#//apple_ref/doc/uid/TP40001976-SW12).
 
 Notes can also have tags, and so there’s a tags element:
-笔记可以有标签，所以下面是一个标签元素：
+笔记可以有标签，下面是一个标签元素：
 
     <element type="tag" access="rw">
         <cocoa key="tags"/>
@@ -200,13 +199,13 @@ That ends the Noteland suite and the entire dictionary:
 ### 应用程序配置
 
 Apps aren’t scriptable out of the box. In Xcode, edit the app’s Info.plist.
-应用在沙盒外不是脚本化的。在 Xcode 中，编辑应用的 Info.plist。
+应用在沙盒外不是脚本化的。我们在 Xcode 中，编辑应用的 Info.plist。
 
 Since the app uses a custom `NSApplication` subclass — in order to provide the top-level container — we edit Principal Class (`NSPrincipalClass`) to say `NLApplication` (the name of Noteland’s `NSApplication` subclass).
-因为应用使用了一个自定义的 `NSApplication` 子类，为了提供顶级容器，我们编辑主体类 (`NSPrincipalClass`) 声明 `NLApplication` (Noteland 的 `NSApplication` 子类名字).
+因为应用使用了一个自定义的 `NSApplication` 子类，为了提供顶级容器，我们编辑主体类 (`NSPrincipalClass`) 以声明 `NLApplication` (Noteland 的 `NSApplication` 子类名字)。
 
 We also add a Scriptable (`NSAppleScriptEnabled`) key and set it to YES. And finally, we add a Scripting definition file name (`OSAScriptingDefinition`) key and give it the name of the sdef file: noteland.sdef.
-我们还添加了一个脚本化的键（`OSAScriptingDefinition`）并且设置它为 YES。最后，我们添加一个名为（`OSAScriptingDefinition`） 键的脚本定义文件，以及将它 sdef 文件命名为：noteland.sdef。
+我们还添加了一个脚本化的键（`OSAScriptingDefinition`）并且设置它为 YES。最后，我们添加一个名为（`OSAScriptingDefinition`） 的键的脚本定义文件，以及将它 sdef 文件命名为：noteland.sdef。
 
 ### Code
 ### 代码
