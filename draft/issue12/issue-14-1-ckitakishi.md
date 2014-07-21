@@ -159,7 +159,7 @@ For `creationDate` and `archived`, we don’t need to provide a Cocoa key elemen
 对于 `creationDate` 和 `archived`，我们并不需要提供 Cocoa 的键元素，因为键和属性名字相同。
 
 Note the types: text, date, and boolean. AppleScript supports these and several more, as [listed in the documentation](https://developer.apple.com/library/mac/documentation/Cocoa/Conceptual/ScriptableCocoaApplications/SApps_about_apps/SAppsAboutApps.html#//apple_ref/doc/uid/TP40001976-SW12).
-注意类型： text, date, 和 boolean。AppleScript 支持它们和其它几个，如 [listed in the documentation](https://developer.apple.com/library/mac/documentation/Cocoa/Conceptual/ScriptableCocoaApplications/SApps_about_apps/SAppsAboutApps.html#//apple_ref/doc/uid/TP40001976-SW12).
+注意类型： text, date, 和 boolean。AppleScript 支持它们和其它几个，如 [本文档中列出的](https://developer.apple.com/library/mac/documentation/Cocoa/Conceptual/ScriptableCocoaApplications/SApps_about_apps/SAppsAboutApps.html#//apple_ref/doc/uid/TP40001976-SW12)。
 
 Notes can also have tags, and so there’s a tags element:
 笔记可以有标签，下面是一个标签元素：
@@ -246,16 +246,16 @@ NLNote.h declares the various properties of a note: `uniqueID`, `text`, `creatio
 NLNote.h 声明了笔记的各个属性： `uniqueID`, `text`, `creationDate`, `archived`, `title`, 和 `tags`。
 
 The `init` method sets the `uniqueID` and `creationDate` and sets the tags array to an empty `NSArray`. We're using an `NSArray` this time, rather than an `NSMutableArray`, just to show it can be done.)
-在 `init` 方法中设置 `uniqueID` 和 `creationDate`，还有将标签数组设为空的 `NSArray`。这次我们使用 `NSArray` 而不是 `NSMutableArray`，仅仅为了说明它也可以达到目的。
+在 `init` 方法中设置 `uniqueID` 和 `creationDate`，以及将标签数组设为空的 `NSArray`。这次我们使用 `NSArray` 而不是 `NSMutableArray`，仅仅为了说明它也可以达到目的。
  
 The `title` method returns a calculated value: the first line of the text of the note. (Recall that this becomes the `name` to the scripting dictionary.)
-`tilte` 方法返回一个计算后的值：笔记中文本的第一行。（回想一下，则会成为了脚本字典的 `name`。）
+`tilte` 方法返回一个计算后的值：笔记中文本的第一行。（回想一下，这会成为了脚本字典的 `name`。）
 
 The method to note is the `objectSpecifier` method. This is critical to your classes; scripting support needs this so it understands your objects.
-要注意 `objectSpecifier` 方法。这是类的关键；脚本支持需要这个使其能够理解你的对象。
+要注意 `objectSpecifier` 方法。这是你的类的关键；脚本支持需要这个使其能够理解你的对象。
 
 Luckily this method is easy to write. Though there are different types of object specifiers, it’s usually best to use `NSUniqueIDSpecifier`, since it’s stable. (Other options include `NSNameSpecifier`, `NSPositionalSpecifier`, and so on.)
-幸运的是，这个方法很容易实现。虽然对象说明符有不同类型，通常最好使用 `NSUniqueIDSpecifier`，因为它很稳定。（其它选项包括：`NSNameSpecifier`, `NSPositionalSpecifier` 等。）
+幸运的是，这个方法很容易实现。虽然对象说明符有不同类型，通常情况下最好使用 `NSUniqueIDSpecifier`，因为它很稳定。（其它选项包括：`NSNameSpecifier`, `NSPositionalSpecifier` 等。）
 
 The object specifier needs to know about the container, and the container is the top-level Application object.
 对象说明符需要了解容器相关的东西，而且容器是顶级应用的对象。
@@ -298,23 +298,23 @@ We create the tag using super’s implementation, then set the tag’s `note` pr
 `NLTag` 有 `uniqueID`, `name`, 和 `note` 属性。
 
 `NLTag`’s `objectSpecifier` is conceptually the same as the code in `NLNote`, except that the container is a note rather than the top-level application class.
-`NLTag` 的 `objectSpecifier` 在概念上和 `NLNote`中的代码相同，除了容器是一个笔记而不是顶级应用类。
+`NLTag` 的 `objectSpecifier` 在概念上和 `NLNote`中的代码相同，除了容器是笔记而不是顶级应用类。
 
 It looks like this:
-如下所示：
+它看起来像下面这样：
 
     NSScriptClassDescription *noteClassDescription = (NSScriptClassDescription *)[self.note classDescription];
     NSUniqueIDSpecifier *noteSpecifier = (NSUniqueIDSpecifier *)[self.note objectSpecifier];
     return [[NSUniqueIDSpecifier alloc] initWithContainerClassDescription:noteClassDescription containerSpecifier:noteSpecifier key:@"tags" uniqueID:self.uniqueID];
 
 That’s it. Done. That’s not much code — most of the work is in designing the interface and editing the sdef file.
-就是这样。完成了。并没有太多代码，大量的工作都是设计 interface 和编辑 sdef 文件。
+就是这样。完成了。并没有太多代码，大量的工作都是设计接口和编辑 sdef 文件。
 
 In the old days, you’d still be writing Apple event handlers and working with Apple event descriptors and all kinds of crazy jazz. In other words, you’d be a long way from done. Thankfully, these aren’t the old days.
-在过去，你需要编写 Apple event 处理程序，并与 Apple event 描述符和各种疯狂的爵士乐一起工作。换句话说，要完成这些你需要走很长的路。值得庆幸的是，已经不是过去的日子了。 
+在过去，你需要编写 Apple event 处理程序，并与 Apple event 描述符和各种疯狂的爵士乐一起工作。换句话说，要完成这些你需要走很长的路。值得庆幸的是，现在已经不是过去的日子了。 
 
 The fun part is next.
-下一个部分会很有趣。
+下一个部分很有趣。
 
 ### AppleScript Editor
 ### AppleScript Editor
@@ -335,7 +335,7 @@ In the Result pane at the bottom, you’ll see something like this:
     {note id "0B0A6DAD-A4C8-42A0-9CB9-FC95F9CB2D53" of application "Noteland", note id "F138AE98-14B0-4469-8A8E-D328B23C67A9" of application "Noteland"}
 
 The IDs will be different, of course, but this is an indication that it’s working.
-当然，ID 会有所不同，但是这是迹象表明，它在工作。
+当然，ID 会有所不同，但是这些迹象表明，它在工作。
 
 Try this script:
 试一试这个脚本：
