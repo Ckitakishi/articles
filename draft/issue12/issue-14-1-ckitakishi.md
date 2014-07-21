@@ -212,20 +212,21 @@ We also add a Scriptable (`NSAppleScriptEnabled`) key and set it to YES. And fin
 
 #### NSApplication subclass
 #### NSApplication 子类
+
 You may be surprised by how little code there is to write.
 你可能会惊讶竟然只需要写那么少的代码。
 
 See NLApplication.m in the Noteland project. It lazily creates a notes array and provides some dummy data. Lazily just because. It has no connection to scripting support.
-见 Noteland 工程中的 NLApplication.m 文件。它懒惰地创建了一个笔记数组且提供了一些虚拟的数据。说懒惰只是因为，它没有连接脚本支持。
+参见 Noteland 工程中的 NLApplication.m 文件。它惰性地创建了一个笔记数组且提供了一些虚拟的数据。说惰性只是因为它没有连接脚本支持。
 
 (Note that there’s no object persistence, since I want Noteland to be as free as possible from things other than scripting support. You’d use Core Data or an archiver or something to persist data.)
-（注意这里没有对象持久化，因为我想让 Noteland 尽可能自由，不仅仅是脚本支持。你可以使用 Core Data 或者 archiever（归档）或者其它东西来保存数据。）
+（注意这里没有对象持久化，因为我想让 Noteland 尽可能自由，而不仅仅是脚本支持。你可以使用 Core Data 或 archiever（归档）或者其它东西来保存数据。）
 
 It could have just skipped the dummy data and provided an array.
 它可能只跳过了虚拟数据和提供的数组。
 
 In this case, the array is an `NSMutableArray`. It wouldn’t have to be — if it’s an `NSArray`, then Cocoa scripting will just replace the notes array when changes are made. But if we make it an `NSMutableArray` *and* we provide the following two methods, then the array won’t be replaced. Instead, objects will be added and removed from the mutable array:
-在本例中，数组是 `NSMutableArray` 类型的。如果是 `NSArray` ，就不需要那样了，然后 Cocoa 脚本只会在发生改变时替换笔记数组。但是如果我们让它作为 `NSMutableArray` 数组 *且* 提供下面两个方法，那么这个数组就不会被替换。取而代之，对象将会被添加，以及从可变数组中移除。 
+在本例中，数组是 `NSMutableArray` 类型的。如果是 `NSArray`，就不需要那样了，然后 Cocoa 脚本只会在发生改变时替换笔记数组。但是如果我们让它作为 `NSMutableArray` 数组 *且* 提供下面两个方法，那么这个数组就不会被替换。取而代之，对象将会被添加，以及从可变数组中移除。 
 
     - (void)insertObject:(NLNote *)object inNotesAtIndex:(NSUInteger)index {
         [self.notes insertObject:object atIndex:index];
@@ -236,7 +237,7 @@ In this case, the array is an `NSMutableArray`. It wouldn’t have to be — if
     }
 
 Also note that the notes array property is declared in the .m file in the class extension. There’s no need to put it in the .h file. Since Cocoa scripting uses KVC and doesn’t care about your headers, it will find it.
-另外需要注意，笔记数组在类扩展的 .m 文件中被声明。不需要将它放到 .h 文件中。因为 Cocoa 脚本使用 KVC ,而且不关心你的header部分，它会找到它的。
+另外需要注意，笔记数组在类扩展的 .m 文件中被声明。不需要将它放到 .h 文件中。因为 Cocoa 脚本使用 KVC ,而且不关心你的头部，它会找到它的。
 
 #### NLNote Class
 #### NLNote 类
